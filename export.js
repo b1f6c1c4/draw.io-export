@@ -23,7 +23,7 @@ module.exports = async ({ file, format, path }) => {
 
     await page.goto('https://www.draw.io/export3.html', { waitUntil: 'networkidle0' });
 
-    const result = await page.evaluate((obj) => render(obj), {
+    await page.evaluate((obj) => render(obj), {
       xml,
       format,
       w: 0,
