@@ -1,5 +1,4 @@
-.dockerignore
-.env
+.cache
 
 # Artifact
 node_modules

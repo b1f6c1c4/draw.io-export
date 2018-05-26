@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 
-const puppeteer = require('puppeteer');
 const yargs = require('yargs');
 const path = require('path');
 const run = require('./export');
