@@ -1,7 +1,18 @@
 {
   "name": "draw.io-export",
   "version": "0.0.0",
+  "description": "Convert draw.io xml to pdf/png within command line.",
+  "main": "index.js",
+  "bin": {
+    "drawio": "./bin/drawio.js"
+  },
   "repository": "https://github.com/b1f6c1c4/draw.io-export",
+  "keywords": [
+    "draw-io",
+    "drawio",
+    "mxgraph",
+    "automation"
+  ],
   "author": "b1f6c1c4 <b1f6c1c4@gmail.com>",
   "dependencies": {
     "axios": "^0.18.0",

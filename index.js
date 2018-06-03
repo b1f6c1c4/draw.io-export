@@ -26,7 +26,7 @@ if (argv._.length !== 1) {
   throw new Error('Exactly one file at a time');
 }
 
-run({
+module.exports = () => run({
   file: argv._[0],
   format: path.extname(argv.output).replace(/^\./, ''),
   path: argv.output,
