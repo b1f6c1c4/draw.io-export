@@ -13,7 +13,7 @@ process.on('uncaughtException', (e) => {
 });
 
 const { argv } = yargs
-  .usage('$0 [mxfile] -o [target]')
+  .usage('$0 <source.drawio> -o [target]')
   .option('o', {
     alias: 'output',
     demandOption: true,
