@@ -28,11 +28,11 @@ const cacheExists = (t) => new Promise((resolve) => {
 });
 
 const cacheDict = {
-  'https://www.draw.io/export3.html': 'export3.html',
-  'https://www.draw.io/js/app.min.js': 'app.min.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_HTMLorMML': 'MathJax.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/config/TeX-MML-AM_HTMLorMML.js?V=2.7.4': 'TeX-MML-AM_HTMLorMML.js',
-  'https://cdn.mathjax.org/mathjax/contrib/a11y/accessibility-menu.js?V=2.7.4': 'accessibility-menu.js',
+  'https://app.diagrams.net/export3.html': 'export3.html',
+  'https://app.diagrams.net/js/app.min.js': 'app.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_HTMLorMML': 'MathJax.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-MML-AM_HTMLorMML.js?V=2.7.5': 'TeX-MML-AM_HTMLorMML.js',
+  'https://cdn.mathjax.org/mathjax/contrib/a11y/accessibility-menu.js?V=2.7.5': 'accessibility-menu.js',
 };
 
 const cache = async (f, t) => {
