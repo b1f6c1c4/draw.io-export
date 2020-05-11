@@ -15,7 +15,13 @@ const readFile = (file) => new Promise((resolve, reject) => {
   });
 });
 
-const cachePath = path.join(__dirname, '.cache');
+const cachePath = (() => {
+  if (process.env.XDG_CACHE_HOME)
+    return path.join(process.env.XDG_CACHE_HOME, 'draw.io-export');
+  if (process.env.HOME)
+    return path.join(process.env.HOME, '.cache', 'draw.io-export');
+  return path.join(__dirname, '.cache');
+})();
 
 const cacheExists = (t) => new Promise((resolve) => {
   fs.exists(path.join(cachePath, t), resolve);
