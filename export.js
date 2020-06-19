@@ -59,8 +59,10 @@ module.exports = async ({ file, format, path: p }) => {
   const xml = await readFile(file);
 
   const browser = await puppeteer.launch({
+    executablePath: process.env.CHROMIUM_PATH,
     headless: true,
-  });
+    args: ['--no-sandbox']                                                
+  });                               
 
   try {
     const page = await browser.newPage();
