@@ -1,0 +1,8 @@
+./node_modules
+./project
+.DS_Store
+.dockerignore
+Dockerfile
+.git
+./files/*
+.gitignore

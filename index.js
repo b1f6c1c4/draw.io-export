@@ -5,6 +5,7 @@ const path = require('path');
 const run = require('./export');
 
 process.on('unhandledRejection', (e) => {
+  console.error(e);
   throw e;
 });
 
