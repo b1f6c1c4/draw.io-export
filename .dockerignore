@@ -1,8 +1,19 @@
-./node_modules
-./project
+.cache
+
+# Artifact
+node_modules
+coverage
+VERSION.json
+
+# Cruft
+*~
+*.swp
+*.swo
 .DS_Store
+npm-debug.log
+yarn-error.log
+
 .dockerignore
-Dockerfile
 .git
-./files/*
 .gitignore
+Dockerfile
