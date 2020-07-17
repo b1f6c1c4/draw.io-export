@@ -1,10 +1,10 @@
 FROM node:lts-alpine3.11
 RUN apk add chromium
+WORKDIR /home/node/draw.io-export
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 ENV CHROMIUM_PATH /usr/bin/chromium-browser
-RUN mkdir -p /home/node/draw.io-export /files
-WORKDIR /home/node/draw.io-export
+COPY package*.json ./
+RUN npm ci --only=production
 COPY . .
-RUN npm install
 VOLUME ["/files"]
-ENTRYPOINT ["sh", "convert.sh"]
+ENTRYPOINT /usr/bin/find /files -type f -name '*.drawio' -exec ./convert.sh '{}' \;

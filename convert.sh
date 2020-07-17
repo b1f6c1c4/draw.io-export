@@ -1,15 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 
-echo "DRAW.IO-EXPORT Started."
-dirs=$(find /files -name '*.drawio')
+printf "Converting %s to %s\n" "$1" "$1.pdf"
+rm -f "$1.pdf"
+node ./bin/drawio.js "$1" -o "$1.pdf"
 
-for dir in $dirs
-do
-    echo "Converting ${dir} to ${dir}.pdf"
-    rm -f "$dir.pdf"
-    node /home/node/draw.io-export/bin/drawio.js "$dir" -o "$dir.pdf"
-    echo "Converting ${dir} to ${dir}.png"
-    rm -f "$dir.png"
-    node /home/node/draw.io-export/bin/drawio.js "$dir" -o "$dir.png"
-done
-echo "DRAW.IO-EXPORT Finished."
+printf "Converting %s to %s\n" "$1" "$1.png"
+rm -f "$1.png"
+node ./bin/drawio.js "$1" -o "$1.png"
