@@ -12,7 +12,3 @@ VERSION.json
 .DS_Store
 npm-debug.log
 yarn-error.log
-
-./project
-project
-package-lock.json
