@@ -56,13 +56,13 @@ const cache = async (f, t) => {
 
 module.exports = async ({ file, format, path: p }) => {
   await Promise.all(_.toPairs(cacheDict).map(([f, t]) => cache(f, t)));
-  const xml = await readFile(file);
+  const fullXml = await readFile(file);
 
   const browser = await puppeteer.launch({
     executablePath: process.env.CHROMIUM_PATH,
     headless: true,
-    args: ['--no-sandbox']                                                
-  });                               
+    args: ['--no-sandbox']
+  });
 
   try {
     const page = await browser.newPage();
@@ -87,48 +87,68 @@ module.exports = async ({ file, format, path: p }) => {
 
     await page.goto('https://www.draw.io/export3.html', { waitUntil: 'networkidle0' });
 
-    await page.evaluate((obj) => render(obj), {
-      xml,
-      format: 'png',
-      w: 0,
-      h: 0,
-      border: 0,
-      bg: 'none',
-      scale: 1,
-    });
+    await page.evaluate((obj) => doc = mxUtils.parseXml(obj), fullXml);
+    const pages = +await page.evaluate(() => doc.documentElement.getAttribute('pages') || 0);
+    if (!pages) process.exit(1);
 
-    await page.waitForSelector('#LoadingComplete');
-    const boundsJson = await page.mainFrame().$eval('#LoadingComplete', (div) => div.getAttribute('bounds'));
-    const bounds = JSON.parse(boundsJson);
+    const gen = async (path) => {
 
-    const fixingScale = 1; // 0.959;
-    const w = Math.ceil(bounds.width * fixingScale);
-    const h = Math.ceil(bounds.height * fixingScale);
+      await page.evaluate((obj) => {
+        const dup = doc.documentElement.cloneNode(false);
+        dup.appendChild(doc.documentElement.firstChild);
+        obj.xml = dup.outerHTML;
+        render(obj);
+      }, {
+        format: 'png',
+        w: 0,
+        h: 0,
+        border: 0,
+        bg: 'none',
+        scale: 1,
+      });
 
-    switch (format) {
-      case 'png':
-        await page.setViewport({ width: w, height: h });
-        await page.screenshot({
-          omitBackground: true,
-          type: 'png',
-          fullPage: true,
-          path: p,
-        });
-        break;
-      case 'pdf': {
-        await page.setViewport({ width: w, height: h });
-        await page.pdf({
-          printBackground: false,
-          width: `${w}px`,
-          height: `${h + 1}px`, // the extra pixel to prevent adding an extra empty page
-          margin: { top: '0px', bottom: '0px', left: '0px', right: '0px' },
-          path: p,
-        });
-        break;
+      await page.waitForSelector('#LoadingComplete');
+      const boundsJson = await page.mainFrame().$eval('#LoadingComplete', (div) => div.getAttribute('bounds'));
+      const bounds = JSON.parse(boundsJson);
+
+      const fixingScale = 1; // 0.959;
+      const w = Math.ceil(bounds.width * fixingScale);
+      const h = Math.ceil(bounds.height * fixingScale);
+
+      switch (format) {
+        case 'png':
+          await page.setViewport({ width: w, height: h });
+          await page.screenshot({
+            omitBackground: true,
+            type: 'png',
+            fullPage: true,
+            path,
+          });
+          break;
+        case 'pdf': {
+          await page.setViewport({ width: w, height: h });
+          await page.pdf({
+            printBackground: false,
+            width: `${w}px`,
+            height: `${h + 1}px`, // the extra pixel to prevent adding an extra empty page
+            margin: { top: '0px', bottom: '0px', left: '0px', right: '0px' },
+            path,
+          });
+          break;
+        }
+        default:
+          throw new Error('Format not allowed');
       }
-      default:
-        throw new Error('Format not allowed');
+
+    };
+
+    if (pages === 1) {
+      await gen(p);
+    } else {
+      for (let i = 0; i < pages; i++)
+        await gen(p + i);
     }
+
   } finally {
     await browser.close();
   }
