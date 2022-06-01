@@ -16,10 +16,11 @@
   "author": "b1f6c1c4 <b1f6c1c4@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.21.1",
-    "lodash": "^4.17.19",
-    "puppeteer": "^2.1.1",
-    "shelljs": "^0.8.4",
-    "yargs": "^15.4.1"
+    "axios": "^0.27.2",
+    "lodash": "^4.17.21",
+    "pdf-merger-js": "^3.4.0",
+    "puppeteer": "^14.1.2",
+    "shelljs": "^0.8.5",
+    "yargs": "^17.5.1"
   }
 }
