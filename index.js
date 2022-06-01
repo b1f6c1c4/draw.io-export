@@ -15,6 +15,11 @@ process.on('uncaughtException', (e) => {
 
 const { argv } = yargs
   .usage('$0 <source.drawio> -o [target]')
+  .option('F', {
+    alias: 'fmt',
+    describe: 'output format',
+    type: 'string',
+  })
   .option('o', {
     alias: 'output',
     demandOption: true,
@@ -29,6 +34,6 @@ if (argv._.length !== 1) {
 
 module.exports = () => run({
   file: argv._[0],
-  format: path.extname(argv.output).replace(/^\./, ''),
+  format: argv.fmt || path.extname(argv.output).replace(/^\./, ''),
   path: argv.output,
 });

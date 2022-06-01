@@ -4,6 +4,7 @@ const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 const shelljs = require('shelljs');
+const PDFMerger = require('pdf-merger-js');
 
 const readFile = (file) => new Promise((resolve, reject) => {
   fs.readFile(file, 'utf-8', (err, res) => {
@@ -91,7 +92,7 @@ module.exports = async ({ file, format, path: p }) => {
     const pages = +await page.evaluate(() => doc.documentElement.getAttribute('pages') || 0);
     if (!pages) process.exit(1);
 
-    const gen = async (path) => {
+    const gen = async (fmt, path) => {
 
       await page.evaluate((obj) => {
         const dup = doc.documentElement.cloneNode(false);
@@ -115,7 +116,7 @@ module.exports = async ({ file, format, path: p }) => {
       const w = Math.ceil(bounds.width * fixingScale);
       const h = Math.ceil(bounds.height * fixingScale);
 
-      switch (format) {
+      switch (fmt) {
         case 'png':
           await page.setViewport({ width: w, height: h });
           await page.screenshot({
@@ -142,11 +143,48 @@ module.exports = async ({ file, format, path: p }) => {
 
     };
 
-    if (pages === 1) {
-      await gen(p);
-    } else {
-      for (let i = 0; i < pages; i++)
-        await gen(p + i);
+    const m = format.match(/^(?<prefix>.*-)?(?<core>png|pdf)$/);
+    const { prefix, core } = m.groups;
+    switch (prefix) {
+      case '':
+        await gen(core, p);
+        break;
+      case 'cat-':
+        if (core != 'pdf')
+          throw new Error('Format not allowed');
+        if (pages === 1) {
+          await gen(core, p);
+        } else {
+          const merger = new PDFMerger();
+          for (let i = 0; i < pages; i++) {
+            const fn = p + '__' + i + '.' + core;
+            await gen(core, fn);
+            merger.add(fn);
+          }
+          await merger.save(p);
+          for (let i = 0; i < pages; i++)
+            shelljs.rm(p + '__' + i + '.' + core);
+        }
+        break;
+      case 'split-':
+      case 'split-index-':
+        for (let i = 0; i < pages; i++)
+          await gen(core, p + i + core);
+        break;
+      case 'split-id-':
+        for (let i = 0; i < pages; i++) {
+          const id = await page.evaluate(() => doc.documentElement.firstChild.getAttribute('id'));
+          await gen(core, p + id + '.' + core);
+        }
+        break;
+      case 'split-name-':
+        for (let i = 0; i < pages; i++) {
+          const name = await page.evaluate(() => doc.documentElement.firstChild.getAttribute('name'));
+          await gen(core, p + name + '.' + core);
+        }
+        break;
+      default:
+        throw new Error('Format prefix not allowed');
     }
 
   } finally {

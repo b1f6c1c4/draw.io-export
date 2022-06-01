@@ -12,6 +12,21 @@ drawio <source.drawio> -o <dest.pdf>
 drawio <source.drawio> -o <dest.png>
 ```
 
+## Supported formats `-F|--fmt`
+
+- If not specified, automatically detect `png` or `pdf`
+- `png` Only the first page is used
+- `pdf` Only the first page is used
+- `cat-pdf` All pages used, concatenated
+- `split-png` All pages used, separate files with name `<dest><#>.png`
+- `split-pdf` All pages used, separate files with name `<dest><#>.pdf`
+- `split-index-png` Alias for `split-png`
+- `split-index-pdf` Alias for `split-pdf`
+- `split-id-png` All pages used, separate files with name `<dest><diagram-id>.png`
+- `split-id-pdf` All pages used, separate files with name `<dest><diagram-id>.pdf`
+- `split-name-png` All pages used, separate files with name `<dest><page-name>.png`
+- `split-name-pdf` All pages used, separate files with name `<dest><page-name>.pdf`
+
 ## Usage with Docker
 
 ```bash
