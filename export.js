@@ -138,7 +138,7 @@ module.exports = async ({ file, format, path: p }) => {
           break;
         }
         default:
-          throw new Error('Format not allowed');
+          throw new Error(`Format ${fmt} not allowed, valid options are: png, pdf`);
       }
 
     };
@@ -146,7 +146,7 @@ module.exports = async ({ file, format, path: p }) => {
     const m = format.match(/^(?<prefix>.*-)?(?<core>png|pdf)$/);
     const { prefix, core } = m.groups;
     switch (prefix) {
-      case '':
+      case undefined:
         await gen(core, p);
         break;
       case 'cat-':
@@ -184,7 +184,7 @@ module.exports = async ({ file, format, path: p }) => {
         }
         break;
       default:
-        throw new Error('Format prefix not allowed');
+        throw new Error(`Format prefix ${prefix} not allowed, valid options are: cat-, split-, split-index-, split-id-, split-name-`);
     }
 
   } finally {
