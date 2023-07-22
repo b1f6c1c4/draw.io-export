@@ -1,6 +1,6 @@
 {
   "name": "draw.io-export",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Convert draw.io xml to pdf/png within command line.",
   "main": "index.js",
   "bin": {
