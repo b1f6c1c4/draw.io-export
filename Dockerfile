@@ -1,4 +1,4 @@
-FROM node:lts-alpine3.11
+FROM node:lts-alpine3.18
 RUN apk add chromium
 WORKDIR /home/node/draw.io-export
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
@@ -7,4 +7,4 @@ COPY package*.json ./
 RUN npm ci --only=production
 COPY . .
 VOLUME ["/files"]
-ENTRYPOINT /usr/bin/find /files -type f -name '*.drawio' -exec ./convert.sh '{}' \;
+ENTRYPOINT ["/home/node/draw.io-export/entrypoint.sh"]

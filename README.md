@@ -32,6 +32,9 @@ drawio <source.drawio> -o <dest.png>
 ```bash
 docker run --rm \
          -v <your folder with .drawio files>:/files \
-         b1f6c1c4/draw.io-export
+         b1f6c1c4/draw.io-export [<fmt>]
 ```
+
+- All above formats are supported
+- If not specified, generate both `png` and `cat-pdf`
 
