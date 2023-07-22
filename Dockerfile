@@ -1,5 +1,5 @@
 FROM node:lts-alpine3.18
-RUN apk add chromium
+RUN apk add chromium coreutils
 WORKDIR /home/node/draw.io-export
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 ENV CHROMIUM_PATH /usr/bin/chromium-browser

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -ex
+set -e
 
 F="$1"
 shift
