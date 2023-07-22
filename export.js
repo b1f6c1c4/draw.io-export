@@ -89,8 +89,7 @@ module.exports = async ({ file, format, path: p }) => {
     await page.goto('https://www.draw.io/export3.html', { waitUntil: 'networkidle0' });
 
     await page.evaluate((obj) => doc = mxUtils.parseXml(obj), fullXml);
-    const pages = +await page.evaluate(() => doc.documentElement.getAttribute('pages') || 0);
-    if (!pages) process.exit(1);
+    const pages = +await page.evaluate(() => doc.documentElement.getAttribute('pages') || 1);
 
     const gen = async (fmt, path) => {
 
