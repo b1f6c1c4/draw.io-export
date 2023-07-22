@@ -95,7 +95,12 @@ module.exports = async ({ file, format, path: p }) => {
 
       await page.evaluate((obj) => {
         const dup = doc.documentElement.cloneNode(false);
-        dup.appendChild(doc.documentElement.firstChild);
+        while (true) {
+          const n = doc.documentElement.firstChild;
+          dup.appendChild(n);
+          if (n.nodeType === Node.ELEMENT_NODE)
+            break;
+        }
         obj.xml = dup.outerHTML;
         render(obj);
       }, {
