@@ -10,6 +10,7 @@ Works nicely with `make` and/or `latexmk`. Useful if you are writing a paper or 
 npm install --global draw.io-export
 drawio <source.drawio> -o <dest.pdf>
 drawio <source.drawio> -o <dest.png>
+drawio <source.drawio> -F <format> -o <dest>
 ```
 
 ## Supported formats `-F|--fmt`
